@@ -13,7 +13,6 @@ Install necessary packages
 pip install spacy
 pip install transformers
 pip install neuralcoref
-
 ```
 
 ### Installing
@@ -22,14 +21,12 @@ Pre-process the dataset
 
 ```
 python3 preprocess.py
-
 ```
 
 This will produce cnn_dataset.pkl. Now run the bert model and cluster produce summary
 
 ```
 python3 bert.py
-
 ```
 
 ## Running the tests
