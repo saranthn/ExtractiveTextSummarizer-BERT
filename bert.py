@@ -1,13 +1,28 @@
 import pickle
+import neuralcoref
+import spacy
+
+nlp = spacy.load('en_core_web_sm')
+neuralcoref.add_to_pipe(nlp)
 
 with open('cnn_dataset.pkl', 'rb') as f:
     data = pickle.load(f)
 
+story_count = len(data)
+
+for j in range(story_count):
+    #convert list of sentences to paragraph
+    combined_story = '. '.join(data[j]['story'])
+    doc = nlp(combined_story)._.coref_resolved
+    doc = nlp(doc)
+    data[j]['story'] = [c.string.strip() for c in doc.sents if 600 > len(c.string.strip()) > 40]
+    
+#print(resolved_story[0]['story'])
 start = "[CLS] "
 end = " [SEP]"
 f = open("error.txt","a")
-story_count = len(data)
 
+# Add [CLS] and [SEP] token at start and end of each sentence
 for j in range(story_count):
     
     sentence_count = len(data[j]['story'])
