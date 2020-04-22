@@ -15,25 +15,7 @@ for j in range(story_count):
     combined_story = '. '.join(data[j]['story'])
     doc = nlp(combined_story)._.coref_resolved
     doc = nlp(doc)
-    data[j]['story'] = [c.string.strip() for c in doc.sents if 600 > len(c.string.strip()) > 40]
-    
-#print(resolved_story[0]['story'])
-start = "[CLS] "
-end = " [SEP]"
-f = open("error.txt","a")
-
-# Add [CLS] and [SEP] token at start and end of each sentence
-for j in range(story_count):
-    
-    sentence_count = len(data[j]['story'])
-    
-    if sentence_count != 0:
-        for i in range(sentence_count):
-            data[j]['story'][i] = start + data[j]['story'][i]+ end
-    else:
-        f.write("error: " + str(j) + "\n")
-        
-f.close() 
+    data[j]['story'] = [c.string.strip() for c in doc.sents if 600 > len(c.string.strip()) > 40]    
 
 from sklearn.cluster import KMeans
 from typing import List
