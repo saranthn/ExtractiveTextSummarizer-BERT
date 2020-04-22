@@ -1,6 +1,7 @@
 from os import listdir
 from pickle import dump
 import string
+from coreference import *
  
 # load doc into memory
 def load_doc(filename):
@@ -69,27 +70,7 @@ for example in stories:
 	example['story'] = clean_lines(example['story'].split('\n'))
 	example['highlights'] = clean_lines(example['highlights'])
 
-story_count = len(stories)
-
-start = "[CLS] "
-end = " [SEP]"
-f = open("error.txt","a")
-
-# Add [CLS] and [SEP] token at start and end of each sentence
-for j in range(story_count):
-    
-    sentence_count = len(stories[j]['story'])
-    
-    if sentence_count != 0:
-        for i in range(sentence_count):
-            stories[j]['story'][i] = start + stories[j]['story'][i]+ end
-    else:
-        f.write("error: " + str(j) + "\n")
-        
-f.close() 
-
 print(stories[90000]['story'])
-print(stories[90000]['highlights'])
 
 # save to file
 dump(stories, open('cnn_dataset.pkl', 'wb'))

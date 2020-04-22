@@ -1,21 +1,7 @@
 import pickle
-import neuralcoref
-import spacy
-
-nlp = spacy.load('en_core_web_sm')
-neuralcoref.add_to_pipe(nlp)
 
 with open('cnn_dataset.pkl', 'rb') as f:
-    data = pickle.load(f)
-
-story_count = len(data)
-
-for j in range(story_count):
-    #convert list of sentences to paragraph
-    combined_story = '. '.join(data[j]['story'])
-    doc = nlp(combined_story)._.coref_resolved
-    doc = nlp(doc)
-    data[j]['story'] = [c.string.strip() for c in doc.sents if 600 > len(c.string.strip()) > 40]    
+    data = pickle.load(f) 
 
 from sklearn.cluster import KMeans
 from typing import List
@@ -25,6 +11,8 @@ import torch
 from transformers import BertTokenizer, BertModel, BertConfig
 import logging
 from cluster import *
+from sentence_handler import *
+from coreference import *
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
@@ -83,11 +71,16 @@ def create_matrix(content) -> ndarray:
         for t in content
     ])
 
-def run_clusters(content, ratio=0.2, algorithm='kmeans') -> List[str]:
-    features = create_matrix(content)
+def run_clusters(content, ratio=0.5, algorithm='kmeans') -> List[str]:
+    print(content)
+    referenced_data = coreference_handler(content)
+    print(referenced_data)
+    processed_sentences = sentence(referenced_data)
+    print(processed_sentences)
+    features = create_matrix(processed_sentences)
     hidden_args = cluster_features(features, ratio)
     return [content[j] for j in hidden_args]
 
-sentences_summary = run_clusters(data[0]['story'],0.2,'kmeans')
+sentences_summary = run_clusters(data[876]['story'],0.5,'kmeans')
 summary = ' '.join(sentences_summary)
 print(summary)

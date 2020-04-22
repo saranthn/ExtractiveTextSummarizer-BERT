@@ -1,24 +1,29 @@
-def cluster_features(features, ratio: float = 0.2) -> List[int]:
-        """
-        Clusters sentences based on the ratio
-        :param ratio: Ratio to use for clustering
-        :return: Sentences index that qualify for summary
-        """
+from sklearn.cluster import KMeans
+from typing import List
+import numpy as np
+from numpy import ndarray
 
-        k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
-        model = get_model(k).fit(features)
-        centroids = get_centroids(model)
-        cluster_args = find_closest_args(centroids, features)
-        sorted_values = sorted(cluster_args.values())
-        return sorted_values
+def cluster_features(features, ratio: float = 0.2) -> List[int]:
+    """
+    Clusters sentences based on the ratio
+    :param ratio: Ratio to use for clustering
+    :return: Sentences index that qualify for summary
+    """
+
+    k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
+    model = get_model(k).fit(features)
+    centroids = get_centroids(model)
+    cluster_args = find_closest_args(centroids, features)
+    sorted_values = sorted(cluster_args.values())
+    return sorted_values
 
 def get_model(k: int):
-        """
-        Retrieve clustering model
-        :param k: amount of clusters
-        :return: Clustering model
-        """
-        return KMeans(n_clusters=k, random_state=12345)
+    """
+    Retrieve clustering model
+    :param k: amount of clusters
+    :return: Clustering model
+    """
+    return KMeans(n_clusters=k, random_state=12345)
 
 def get_centroids(model):
     """
