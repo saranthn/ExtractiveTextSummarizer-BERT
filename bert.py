@@ -72,15 +72,12 @@ def create_matrix(content) -> ndarray:
     ])
 
 def run_clusters(content, ratio=0.5, algorithm='kmeans') -> List[str]:
-    print(content)
     referenced_data = coreference_handler(content)
-    print(referenced_data)
     processed_sentences = sentence(referenced_data)
-    print(processed_sentences)
     features = create_matrix(processed_sentences)
     hidden_args = cluster_features(features, ratio)
     return [content[j] for j in hidden_args]
 
-sentences_summary = run_clusters(data[876]['story'],0.5,'kmeans')
+sentences_summary = run_clusters(data[876]['story'],0.3,'kmeans')
 summary = ' '.join(sentences_summary)
 print(summary)
