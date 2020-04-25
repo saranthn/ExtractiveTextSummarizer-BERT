@@ -12,17 +12,17 @@ number_of_summaries = len(data)
 print(number_of_summaries)
 
 def retrieve_wcss_bcss(content):
-    referenced_data = coreference_handler(content)
-    processed_sentences = sentence(referenced_data)
+    processed_sentences = sentence(content)
     features = create_matrix(processed_sentences)
     wcss, bcss = get_wcss_bcss(features, 0.3)
     return wcss, bcss
 
-with open("data.csv", "w", newline='') as f:
+with open("data2.csv", "a", newline='') as f:
     thewriter = csv.writer(f)
-    thewriter.writerow(['wcss','bcss','length_of summary'])
-    for i in range(1,4):
+    for i in range(5000,10000):
         print(i)
+        if len(data[i]['highlights']) == 0 or len(data[i]['story']) == 0:
+            continue
         golden_summary_length = len(data[i]['highlights'])
         wcss, bcss = retrieve_wcss_bcss(data[i]['story'])
-        thewriter.writerow([wcss, bcss,golden_summary_length])
+        thewriter.writerow([wcss, bcss, golden_summary_length])

@@ -9,6 +9,6 @@ def sentence(content):
         for i in range(sentence_count):
             content[i] = start + content[i]+ end
     else:
-        f.write("error: " + str(j) + "\n")            
+        f.write("error: " + "\n")            
     f.close() 
     return content

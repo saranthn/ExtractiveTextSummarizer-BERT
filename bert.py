@@ -71,7 +71,7 @@ def create_matrix(content) -> ndarray:
         for t in content
     ])
 
-def run_clusters(content, ratio=0.5, algorithm='kmeans') -> List[str]:
+def run_clusters(content, ratio=0.3, algorithm='kmeans') -> List[str]:
     referenced_data = coreference_handler(content)
     processed_sentences = sentence(referenced_data)
     features = create_matrix(processed_sentences)

@@ -5,7 +5,7 @@ from numpy import ndarray
 
 def get_wcss_bcss(features, ratio: float = 0.3):
     """
-    Retrievs wcss and bcss
+    Retrieves wcss and bcss
     """
 
     k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
@@ -27,8 +27,6 @@ def cluster_features(features, ratio: float = 0.3) -> List[int]:
     model = get_model(k).fit(features)   
     centroids = get_centroids(model)          
     cluster_args = find_closest_args(centroids, features)  
-    wcss_distance = within_cluster_ss(centroids,k,model,features)
-    bcss_distance = between_cluster_ss(centroids)
     sorted_values = sorted(cluster_args.values())
     return sorted_values
 
