@@ -3,7 +3,20 @@ from typing import List
 import numpy as np
 from numpy import ndarray
 
-def cluster_features(features, ratio: float = 0.2) -> List[int]:
+def get_wcss_bcss(features, ratio: float = 0.3):
+    """
+    Retrievs wcss and bcss
+    """
+
+    k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
+    model = get_model(k).fit(features)   
+    centroids = get_centroids(model)          
+    cluster_args = find_closest_args(centroids, features)  
+    wcss_distance = within_cluster_ss(centroids,k,model,features)
+    bcss_distance = between_cluster_ss(centroids)
+    return wcss_distance, bcss_distance
+
+def cluster_features(features, ratio: float = 0.3) -> List[int]:
     """
     Clusters sentences based on the ratio
     :param ratio: Ratio to use for clustering
@@ -15,9 +28,7 @@ def cluster_features(features, ratio: float = 0.2) -> List[int]:
     centroids = get_centroids(model)          
     cluster_args = find_closest_args(centroids, features)  
     wcss_distance = within_cluster_ss(centroids,k,model,features)
-    print(wcss_distance)
     bcss_distance = between_cluster_ss(centroids)
-    print(bcss_distance)
     sorted_values = sorted(cluster_args.values())
     return sorted_values
 
