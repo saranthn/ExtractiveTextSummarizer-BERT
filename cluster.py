@@ -4,29 +4,30 @@ import numpy as np
 from numpy import ndarray
 
 def cluster_features(features, ratio: float = 0.2) -> List[int]:
-        """
-        Clusters sentences based on the ratio
-        :param ratio: Ratio to use for clustering
-        :return: Sentences index that qualify for summary
-        """
+    """
+    Clusters sentences based on the ratio
+    :param ratio: Ratio to use for clustering
+    :return: Sentences index that qualify for summary
+    """
 
-        k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
-        model = get_model(k).fit(features)   
-        centroids = get_centroids(model)          
-        #labels = get_labels(model)
-        cluster_args = find_closest_args(centroids, features)  
-        wcss_distance = within_cluster_ss(centroids,k,model,features)
-        bcss_distance = between_cluster_ss(centroids)
-        sorted_values = sorted(cluster_args.values())
-        return sorted_values
+    k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
+    model = get_model(k).fit(features)   
+    centroids = get_centroids(model)          
+    cluster_args = find_closest_args(centroids, features)  
+    wcss_distance = within_cluster_ss(centroids,k,model,features)
+    print(wcss_distance)
+    bcss_distance = between_cluster_ss(centroids)
+    print(bcss_distance)
+    sorted_values = sorted(cluster_args.values())
+    return sorted_values
 
 def get_model(k: int):
-        """
-        Retrieve clustering model
-        :param k: amount of clusters
-        :return: Clustering model
-        """
-        return KMeans(n_clusters=k, random_state=12345)
+    """
+    Retrieve clustering model
+    :param k: amount of clusters
+    :return: Clustering model
+    """
+    return KMeans(n_clusters=k, random_state=12345)
     
 def get_labels(model):
     """
@@ -72,8 +73,6 @@ def find_closest_args(centroids: np.ndarray, features):
 
     return args
 
-
-
 def within_cluster_ss(centroids:np.ndarray,k,model,features):
     """
     Find the WCSS
@@ -86,16 +85,11 @@ def within_cluster_ss(centroids:np.ndarray,k,model,features):
         cluster2 = []
         for point in cluster[i]:
             cluster2.append(features[point])
-            cluster[i] = cluster2
-        
+            cluster[i] = cluster2      
     '''
-    cluster[i] has list of points which have centroid as i
-    '''
-        
-    '''
+    cluster[i] has list of points which have centroid as i     
     (cluster[0][i] - centroid[0]) distance
     '''    
-
     wcss = 0
     wcss_avg_cluster = 0
     for j,centroid in enumerate(centroids):
@@ -106,7 +100,6 @@ def within_cluster_ss(centroids:np.ndarray,k,model,features):
         wcss_avg_cluster = wcss_avg_cluster +  centroid_dist/len(cluster[j])
     wcss = wcss_avg_cluster/len(centroids)
     
-   
     return wcss
 
 def between_cluster_ss(centroids:np.ndarray):
@@ -123,8 +116,7 @@ def between_cluster_ss(centroids:np.ndarray):
             distance = np.linalg.norm(current_centroid - new_centroid, 2)
             current_distance = current_distance + distance
         bcss = bcss + current_distance
-    
-    
+       
     return bcss
             
             
