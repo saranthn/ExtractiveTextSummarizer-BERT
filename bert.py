@@ -74,15 +74,21 @@ def create_matrix(content) -> ndarray:
 
 def run_clusters(content, ratio=0.3, algorithm='kmeans') -> List[str]:
     referenced_data = coreference_handler(content)
-    processed_sentences = sentence(content)
+    processed_sentences = sentence_handler(content)
     features = create_matrix(processed_sentences)
     hidden_args = cluster_features(features, ratio)
     return [content[j] for j in hidden_args]
 
-for i in range(1,5):
+for i in range(1, 10):
     sentences_summary = run_clusters(data[i]['story'],0.3,'kmeans')
-    #print(len(data[i]['story']))
-    summary = '. '.join(sentences_summary)
+    modified_summary = []
+    # Remove [CLS] and [SEP] tokens
+    for sentence in sentences_summary:
+        sentence = sentence.replace('[CLS]', '')
+        sentence = sentence.replace('[SEP]', '')
+        modified_summary.append(sentence)
+    summary = '.'.join(modified_summary)
+    print(summary)
     gold_summary = data[i]['highlights']
     score = rouge_score(summary, gold_summary)
-    #print(score)
+    print(score)

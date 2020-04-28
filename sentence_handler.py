@@ -1,4 +1,4 @@
-def sentence(content):
+def sentence_handler(content):
     start = "[CLS] "
     end = " [SEP]"
     f = open("error.txt","a")
