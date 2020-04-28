@@ -81,8 +81,8 @@ def run_clusters(content, ratio=0.3, algorithm='kmeans') -> List[str]:
 
 for i in range(1,5):
     sentences_summary = run_clusters(data[i]['story'],0.3,'kmeans')
-    print(len(data[i]['story']))
+    #print(len(data[i]['story']))
     summary = '. '.join(sentences_summary)
     gold_summary = data[i]['highlights']
     score = rouge_score(summary, gold_summary)
-    print(score)
+    #print(score)

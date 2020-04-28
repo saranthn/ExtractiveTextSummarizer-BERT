@@ -12,9 +12,9 @@ def get_wcss_bcss(features, ratio: float = 0.3):
     model = get_model(k).fit(features)   
     centroids = get_centroids(model)          
     cluster_args = find_closest_args(centroids, features)  
-    wcss_distance = within_cluster_ss(centroids,k,model,features)
+    avg_wcss, wcss_per_cluster = avg_within_cluster_ss(centroids,k,model,features)
     bcss_distance = between_cluster_ss(centroids)
-    return wcss_distance, bcss_distance
+    return avg_wcss, bcss_distance
 
 def cluster_features(features, ratio: float = 0.3) -> List[int]:
     """
@@ -25,8 +25,9 @@ def cluster_features(features, ratio: float = 0.3) -> List[int]:
 
     k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
     model = get_model(k).fit(features)   
-    centroids = get_centroids(model)          
-    cluster_args = find_closest_args(centroids, features)  
+    centroids = get_centroids(model)
+    avg_wcss, wcss_per_cluster = avg_within_cluster_ss(centroids,k,model,features)          
+    cluster_args = find_closest_args(centroids, features, wcss_per_cluster)  
     sorted_values = sorted(cluster_args.values())
     return sorted_values
 
@@ -54,20 +55,20 @@ def get_centroids(model):
     """
     return model.cluster_centers_
 
-def find_closest_args(centroids: np.ndarray, features):
+def find_closest_args(centroids: np.ndarray, features, wcss_per_cluster):
     """
     Find the closest arguments to centroid
     :param centroids: Centroids to find closest
     :return: Closest arguments
     """
-
+    print(wcss_per_cluster)
     centroid_min = 1e10
     cur_arg = -1
     args = {}
     used_idx = []
+    k = 0
 
     for j, centroid in enumerate(centroids):
-
         for i, feature in enumerate(features):
             value = np.linalg.norm(feature - centroid)
 
@@ -76,13 +77,28 @@ def find_closest_args(centroids: np.ndarray, features):
                 centroid_min = value
 
         used_idx.append(cur_arg)
-        args[j] = cur_arg
+        args[k] = cur_arg
+        k = k + 1
         centroid_min = 1e10
         cur_arg = -1
 
+        if wcss_per_cluster[j] >= 7:
+            for i, feature in enumerate(features):
+                value = np.linalg.norm(feature - centroid)
+
+                if value < centroid_min and i not in used_idx:
+                    cur_arg = i
+                    centroid_min = value
+
+            used_idx.append(cur_arg)
+            args[k] = cur_arg
+            k = k + 1
+            centroid_min = 1e10
+            cur_arg = -1
+
     return args
 
-def within_cluster_ss(centroids:np.ndarray,k,model,features):
+def avg_within_cluster_ss(centroids:np.ndarray,k,model,features):
     """
     Find the WCSS
     :param centroids: Centroids of the each cluster
@@ -99,17 +115,18 @@ def within_cluster_ss(centroids:np.ndarray,k,model,features):
     cluster[i] has list of points which have centroid as i     
     (cluster[0][i] - centroid[0]) distance
     '''    
-    wcss = 0
-    wcss_avg_cluster = 0
+    wcss = []
+    wcss_total_cluster = 0
     for j,centroid in enumerate(centroids):
         centroid_dist = 0  #Sum of euclidean distances of points in each cluster
         for point in cluster[j]:
             distance = np.linalg.norm(point - centroid, 2)
             centroid_dist = centroid_dist + distance
-        wcss_avg_cluster = wcss_avg_cluster +  centroid_dist/len(cluster[j])
-    wcss = wcss_avg_cluster/len(centroids)
+        wcss_total_cluster = wcss_total_cluster +  centroid_dist/len(cluster[j])
+        wcss.append(centroid_dist/len(cluster[j]))
+    avg_wcss = wcss_total_cluster/len(centroids)
     
-    return wcss
+    return avg_wcss, wcss
 
 def between_cluster_ss(centroids:np.ndarray):
     """
