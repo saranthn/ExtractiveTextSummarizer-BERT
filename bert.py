@@ -79,8 +79,8 @@ def run_clusters(content, ratio=0.3, algorithm='kmeans') -> List[str]:
     hidden_args = cluster_features(features, ratio)
     return [content[j] for j in hidden_args]
 
-for i in range(1, 10):
-    sentences_summary = run_clusters(data[i]['story'],0.3,'kmeans')
+def create_summary(content, ratio=0.3, algorithm='kmeans'):
+    sentences_summary = run_clusters(content, 0.3, 'kmeans')
     modified_summary = []
     # Remove [CLS] and [SEP] tokens
     for sentence in sentences_summary:
@@ -88,7 +88,4 @@ for i in range(1, 10):
         sentence = sentence.replace('[SEP]', '')
         modified_summary.append(sentence)
     summary = '.'.join(modified_summary)
-    print(summary)
-    gold_summary = data[i]['highlights']
-    score = rouge_score(summary, gold_summary)
-    print(score)
+    return summary

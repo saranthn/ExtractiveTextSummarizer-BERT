@@ -11,9 +11,9 @@ def get_wcss_bcss(features, ratio: float = 0.3):
     k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
     model = get_model(k).fit(features)   
     centroids = get_centroids(model)          
-    cluster_args = find_closest_args(centroids, features)  
     avg_wcss, wcss_per_cluster = avg_within_cluster_ss(centroids,k,model,features)
     bcss_distance = between_cluster_ss(centroids)
+    cluster_args = find_closest_args(centroids, features, wcss_per_cluster)  
     return avg_wcss, bcss_distance
 
 def cluster_features(features, ratio: float = 0.3) -> List[int]:
