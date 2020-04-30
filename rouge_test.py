@@ -1,4 +1,4 @@
-from sumeval.metrics.rouge import RougeCalculator
+from rouge import Rouge
 
 def rouge_score(gen_summary, gold_summary):
     gold_summary_formatted = ""
@@ -11,25 +11,7 @@ def rouge_score(gen_summary, gold_summary):
     print(gen_summary)
     print("##################")
 
-    rouge = RougeCalculator(stopwords=True, lang="en")
+    rouge = Rouge()
+    scores = rouge.get_scores(gen_summary, gold_summary_formatted)
 
-    rouge_1 = rouge.rouge_n(
-                summary=gen_summary,
-                references=gold_summary_formatted,
-                n=1)
-
-    rouge_2 = rouge.rouge_n(
-                summary=gen_summary,
-                references=gold_summary_formatted,
-                n=2)
-
-    rouge_l = rouge.rouge_l(
-                summary=gen_summary,
-                references=gold_summary_formatted)
-
-    rouge_be = rouge.rouge_be(
-                summary=gen_summary,
-                references=gold_summary_formatted)
-
-    scores={"ROUGE-1":rouge_1,"ROUGE-2":rouge_2,"ROUGE-L":rouge_l,"ROUGE-BE":rouge_be}
-    return scores 
+    return scores
