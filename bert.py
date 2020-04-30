@@ -79,6 +79,18 @@ def run_clusters(content, ratio=0.3, algorithm='kmeans') -> List[str]:
     hidden_args = cluster_features(features, ratio)
     return [content[j] for j in hidden_args]
 
+R1_p=0.0
+R1_r=0.0
+R1_f=0.0
+
+R2_p=0.0
+R2_r=0.0
+R2_f=0.0
+
+RL_p=0.0
+RL_r=0.0
+RL_f=0.0
+
 for i in range(1,5):
     sentences_summary = run_clusters(data[i]['story'],0.3,'kmeans')
     print(len(data[i]['story']))
@@ -86,3 +98,29 @@ for i in range(1,5):
     gold_summary = data[i]['highlights']
     score = rouge_score(summary, gold_summary)
     print(score)
+
+    R1_p+=score[0]["rouge-1"]["p"]
+    R1_r+=score[0]["rouge-1"]["r"]
+    R1_f+=score[0]["rouge-1"]["f"]
+
+    R2_p+=score[0]["rouge-2"]["p"]
+    R2_r+=score[0]["rouge-2"]["r"]
+    R2_f+=score[0]["rouge-2"]["f"]
+
+    RL_p+=score[0]["rouge-l"]["p"]
+    RL_r+=score[0]["rouge-l"]["r"]
+    RL_f+=score[0]["rouge-l"]["f"]
+
+print("Average score for this document: \n")
+print(" Rouge - 1: ")
+print(" precision = "+str(R1_p/len(data)))
+print(" recall = "+str(R1_r/len(data)))
+print(" F score = "+str(R1_f/len(data)))
+print("\n   Rouge - 2: ")
+print(" precision = "+str(R2_p/len(data)))
+print(" recall = "+str(R2_r/len(data)))
+print(" F score = "+str(R2_f/len(data)))
+print("\n   Rouge - l: ")
+print(" precision = "+str(RL_p/len(data)))
+print(" recall = "+str(RL_r/len(data)))
+print(" F score = "+str(RL_f/len(data)))
