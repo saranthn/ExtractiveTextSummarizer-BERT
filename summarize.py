@@ -29,9 +29,67 @@ def execute(x):
         summary = create_summary(sentences_doc)
         print(summary)       
     elif x == 'create_summary_cnn':
+        no_summary = 0
+        avg_R1_p=0.0
+        avg_R1_r=0.0
+        avg_R1_f=0.0
+
+        avg_R2_p=0.0
+        avg_R2_r=0.0
+        avg_R2_f=0.0
+
+        avg_RL_p=0.0
+        avg_RL_r=0.0
+        avg_RL_f=0.0
         for i in range(1, 10):
             summary = create_summary(data[i]['story'],0.3,'kmeans')
             print(summary)
+            no_summary = no_summary + 1
+            R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[i]['highlights'])
+
+            avg_R1_p += R1_p
+            avg_R1_r += R1_r
+            avg_R1_f += R1_f
+
+            avg_R2_p += R2_p
+            avg_R2_r += R2_r
+            avg_R2_f += R2_f
+
+            avg_RL_p += RL_p
+            avg_RL_r += RL_r
+            avg_RL_f += RL_f
+
+        print(no_summary)
+        print("Average score for this document: \n")
+        print("Rouge - 1: ")
+        print(" precision = "+str(avg_R1_p/no_summary))
+        print(" recall = "+str(avg_R1_r/no_summary))
+        print(" F score = "+str(avg_R1_f/no_summary))
+        print("\nRouge - 2: ")
+        print(" precision = "+str(avg_R2_p/no_summary))
+        print(" recall = "+str(avg_R2_r/no_summary))
+        print(" F score = "+str(avg_R2_f/no_summary))
+        print("\nRouge - l: ")
+        print(" precision = "+str(avg_RL_p/no_summary))
+        print(" recall = "+str(avg_RL_r/no_summary))
+        print(" F score = "+str(avg_RL_f/no_summary))
+
+    elif x == 'create_summary_single':
+        summary = create_summary(data[0]['story'],0.3,'kmeans')
+        print(summary)
+        R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[0]['highlights'])
+        print("Rouge - 1: ")
+        print(" precision = "+str(R1_p))
+        print(" recall = "+str(R1_r))
+        print(" F score = "+str(R1_f))
+        print("\nRouge - 2: ")
+        print(" precision = "+str(R2_p))
+        print(" recall = "+str(R2_r))
+        print(" F score = "+str(R2_f))
+        print("\nRouge - l: ")
+        print(" precision = "+str(RL_p))
+        print(" recall = "+str(RL_r))
+        print(" F score = "+str(RL_f))
     elif x == 'train_model':
         linear_regression()
     elif x == 'collect_data':
