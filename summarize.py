@@ -28,7 +28,7 @@ def execute(x):
         sentences_doc = document.split('.')
         summary = create_summary(sentences_doc)
         print(summary)       
-    elif x == 'create_summary_cnn':
+    elif x == 'test_cnn':
         no_summary = 0
         avg_R1_p=0.0
         avg_R1_r=0.0
@@ -41,9 +41,8 @@ def execute(x):
         avg_RL_p=0.0
         avg_RL_r=0.0
         avg_RL_f=0.0
-        for i in range(1, 100):
+        for i in range(1, 25):
             summary = create_summary(data[i]['story'],0.3,'kmeans')
-            print(i)
             no_summary = no_summary + 1
             R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[i]['highlights'])
 
@@ -74,7 +73,7 @@ def execute(x):
         print(" recall = "+str(avg_RL_r/no_summary))
         print(" F score = "+str(avg_RL_f/no_summary))
 
-    elif x == 'create_summary_single':
+    elif x == 'create_summary_cnn_single':
         summary = create_summary(data[0]['story'],0.3,'kmeans')
         print(summary)
         R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[0]['highlights'])
