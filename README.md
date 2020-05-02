@@ -38,16 +38,22 @@ To produce the summary of any specific CNN document, specify the document number
 python3 summarize.py create_summary_cnn_single
 ```
 
-To collect 'within cluster sum of squares', 'between cluster sum of squares', 'summary length' data
+To collect **within cluster sum of squares**, **between cluster sum of squares**, **summary length** data
 
 ```
 python3 summarize.py collect_data
 ```
 
-To train a linear regression model between 'within cluster sum of squares' and 'summary length'
+To train a linear regression model between **within cluster sum of squares** and **summary length**
 
 ```
 python3 summarize.py train_model
+```
+
+To check the histogram produced by **within cluster sum of squares**
+
+```
+python3 histogram_wcss
 ```
 
 ## Running the tests
