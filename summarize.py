@@ -41,9 +41,9 @@ def execute(x):
         avg_RL_p=0.0
         avg_RL_r=0.0
         avg_RL_f=0.0
-        for i in range(1, 10):
+        for i in range(1, 100):
             summary = create_summary(data[i]['story'],0.3,'kmeans')
-            print(summary)
+            print(i)
             no_summary = no_summary + 1
             R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[i]['highlights'])
 
