@@ -41,22 +41,30 @@ def execute(x):
         avg_RL_p=0.0
         avg_RL_r=0.0
         avg_RL_f=0.0
-        for i in range(1, 25):
-            summary = create_summary(data[i]['story'],0.3,'kmeans')
-            no_summary = no_summary + 1
-            R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[i]['highlights'])
 
-            avg_R1_p += R1_p
-            avg_R1_r += R1_r
-            avg_R1_f += R1_f
+        with open("rouge_results.csv", "w", newline='') as f:
+            thewriter = csv.writer(f)
+            for i in range(1869, 1875):
+                print(i)
+                if len(data[i]['highlights']) == 0 or len(data[i]['story']) == 0:
+                    continue
+                summary = create_summary(data[i]['story'],0.3,'kmeans')
+                no_summary = no_summary + 1
 
-            avg_R2_p += R2_p
-            avg_R2_r += R2_r
-            avg_R2_f += R2_f
+                R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[i]['highlights'])
 
-            avg_RL_p += RL_p
-            avg_RL_r += RL_r
-            avg_RL_f += RL_f
+                avg_R1_p += R1_p
+                avg_R1_r += R1_r
+                avg_R1_f += R1_f
+
+                avg_R2_p += R2_p
+                avg_R2_r += R2_r
+                avg_R2_f += R2_f
+
+                avg_RL_p += RL_p
+                avg_RL_r += RL_r
+                avg_RL_f += RL_f
+                thewriter.writerow([R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f])
 
         print(no_summary)
         print("Average score for this document: \n")

@@ -79,8 +79,6 @@ def find_closest_args(centroids: np.ndarray, features, wcss_per_cluster):
             no_sentence_to_choose = 2
         else:
             no_sentence_to_choose = 3
-        print(no_sentence_to_choose)
-        no_sentence_to_choose = 1
         while no_sentence_to_choose > 0:
             for i, feature in enumerate(features):
                 value = np.linalg.norm(feature - centroid)
@@ -95,7 +93,6 @@ def find_closest_args(centroids: np.ndarray, features, wcss_per_cluster):
             centroid_min = 1e10
             cur_arg = -1
             no_sentence_to_choose = no_sentence_to_choose - 1
-    print(len(args))
 
     return args
 
