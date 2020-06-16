@@ -5,7 +5,7 @@ import pandas as pd
 def linear_regression():
     # Importing the dataset
     dataset = pd.read_csv('data2.csv')
-    x = dataset.iloc[:, 1].values.reshape(-1,1)
+    x = dataset.iloc[:, 0].values.reshape(-1,1)
     y = dataset.iloc[:, 2].values
     print(x)
     print(y)
@@ -23,8 +23,8 @@ def linear_regression():
     viz_train = plt
     viz_train.scatter(x_train, y_train, color='red')
     viz_train.plot(x_train, regressor.predict(x_train), color='blue')
-    viz_train.title('wcss vs length of summary (Training set)')
-    viz_train.xlabel('wcss')
+    viz_train.title('bcss vs length of summary (Training set)')
+    viz_train.xlabel('bcss')
     viz_train.ylabel('length of summary')
     viz_train.show()
 
@@ -32,8 +32,8 @@ def linear_regression():
     viz_test = plt
     viz_test.scatter(x_test, y_test, color='red')
     viz_test.plot(x_train, regressor.predict(x_train), color='blue')
-    viz_test.title('wcss vs length of summary (Test set)')
-    viz_test.xlabel('wcss')
+    viz_test.title('bcss vs length of summary (Test set)')
+    viz_test.xlabel('bcss')
     viz_test.ylabel('length of summary')
     viz_test.show()
 

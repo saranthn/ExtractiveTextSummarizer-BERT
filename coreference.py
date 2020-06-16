@@ -9,4 +9,7 @@ def coreference_handler(content):
     combined_story = '. '.join(content)
     doc = nlp(combined_story)._.coref_resolved
     doc = nlp(doc)
+    print("#########################")
+    print("Coreference Clusters")
+    print(doc._.coref_clusters)
     return [c.string.strip() for c in doc.sents if 600 > len(c.string.strip()) > 40]   

@@ -19,15 +19,22 @@ def get_wcss_bcss(features, ratio: float = 0.3):
 def cluster_features(features, ratio: float = 0.3) -> List[int]:
     """
     Clusters sentences based on the ratio
-    :param ratio: Ratio to use for clustering
+    :param ratio: Number of Clusters
     :return: Sentences index that qualify for summary
     """
 
     k = 1 if ratio * len(features) < 1 else int(len(features) * ratio)
     model = get_model(k).fit(features)   
     centroids = get_centroids(model)
-    avg_wcss, wcss_per_cluster = avg_within_cluster_ss(centroids,k,model,features)          
-    cluster_args = find_closest_args(centroids, features, wcss_per_cluster)  
+    print("#########################")
+    print("Centroids: ")
+    print(centroids)
+    avg_wcss, wcss_per_cluster = avg_within_cluster_ss(centroids,k,model,features)   
+    print("#########################")
+    print("WCSS: ")  
+    print(wcss_per_cluster)
+    cluster_args = find_closest_args(centroids, features, wcss_per_cluster) 
+    print(cluster_args) 
     sorted_values = sorted(cluster_args.values())
     return sorted_values
 
@@ -61,7 +68,6 @@ def find_closest_args(centroids: np.ndarray, features, wcss_per_cluster):
     :param centroids: Centroids to find closest
     :return: Closest arguments
     """
-    print(wcss_per_cluster)
     no_sentence_to_choose = 0
     centroid_min = 1e10
     cur_arg = -1

@@ -64,13 +64,13 @@ def clean_lines(lines):
 directory = 'cnn_stories_tokenized/'
 stories = load_stories(directory)
 print('Loaded Stories %d' % len(stories))
- 
+
+print(stories[0]['story'])
 # clean stories
 for example in stories:
 	example['story'] = clean_lines(example['story'].split('\n'))
 	example['highlights'] = clean_lines(example['highlights'])
-
-print(stories[90000]['story'])
+	print(stories[0]['story'][0])
 
 # save to file
 dump(stories, open('cnn_dataset.pkl', 'wb'))

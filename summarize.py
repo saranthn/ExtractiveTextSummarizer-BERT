@@ -26,7 +26,11 @@ def execute(x):
         Although you are not required to have an organization to use GCP, organizations are very useful. Organizations let you set policies that apply throughout your enterprise. Also having an organization is required to use folders. The GCP resource are our key helps you manage resources across multiple departments and multiple teams within an organization. You can define an are our key that creates trust boundaries and resource isolation. 
         For example should members of your Human Resources team be able to delete running database servers and should your engineers be able to delete the database containing employee salaries? Probably not in either case. Cloud Identity and Access Management also called IAM lets you fine-tune access control to all the GCP resources you use. You define IAM policies that control user access to resources. """
         sentences_doc = document.split('.')
+        print("document to summarize")
+        print(document)
+        print("##############")
         summary = create_summary(sentences_doc)
+        print("summary")
         print(summary)       
     elif x == 'test_cnn':
         no_summary = 0
@@ -42,17 +46,28 @@ def execute(x):
         avg_RL_r=0.0
         avg_RL_f=0.0
 
-        with open("rouge_results.csv", "w", newline='') as f:
+        with open("rouge_results4.csv", "w", newline='') as f:
             thewriter = csv.writer(f)
-            for i in range(1869, 1875):
+            for i in range(1, 30):
                 print(i)
                 if len(data[i]['highlights']) == 0 or len(data[i]['story']) == 0:
                     continue
-                summary = create_summary(data[i]['story'],0.3,'kmeans')
+                summary = create_summary(data[i]['story'],0.2,'kmeans')
                 no_summary = no_summary + 1
 
                 R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[i]['highlights'])
-
+                print("Rouge - 1: ")
+                print(" precision = "+str(R1_p))
+                print(" recall = "+str(R1_r))
+                print(" F score = "+str(R1_f))
+                print("\nRouge - 2: ")
+                print(" precision = "+str(R2_p))
+                print(" recall = "+str(R2_r))
+                print(" F score = "+str(R2_f))
+                print("\nRouge - l: ")
+                print(" precision = "+str(RL_p))
+                print(" recall = "+str(RL_r))
+                print(" F score = "+str(RL_f))
                 avg_R1_p += R1_p
                 avg_R1_r += R1_r
                 avg_R1_f += R1_f
@@ -67,7 +82,6 @@ def execute(x):
                 thewriter.writerow([R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f])
 
         print(no_summary)
-        print("Average score for this document: \n")
         print("Rouge - 1: ")
         print(" precision = "+str(avg_R1_p/no_summary))
         print(" recall = "+str(avg_R1_r/no_summary))
@@ -82,9 +96,19 @@ def execute(x):
         print(" F score = "+str(avg_RL_f/no_summary))
 
     elif x == 'create_summary_cnn_single':
-        summary = create_summary(data[0]['story'],0.3,'kmeans')
+        y=1
+        print("#########################")
+        print("Document to be Summarized")
+        print(data[y]['story'])
+        summary = create_summary(data[y]['story'],0.2,'kmeans')
+        print("#########################")
+        print("Generated Summary")
         print(summary)
-        R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[0]['highlights'])
+        print("#########################")
+        print("Reference Summary")
+        print(data[y]['highlights'])
+        print("#########################")
+        R1_p, R1_r, R1_f, R2_p, R2_r, R2_f, RL_p, RL_r, RL_f = rouge_score(summary, data[y]['highlights'])
         print("Rouge - 1: ")
         print(" precision = "+str(R1_p))
         print(" recall = "+str(R1_r))
@@ -97,6 +121,7 @@ def execute(x):
         print(" precision = "+str(RL_p))
         print(" recall = "+str(RL_r))
         print(" F score = "+str(RL_f))
+
     elif x == 'train_model':
         linear_regression()
     elif x == 'collect_data':

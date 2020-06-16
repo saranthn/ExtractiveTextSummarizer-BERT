@@ -27,7 +27,7 @@ def extract_embeddings(sentence) -> ndarray:
     # Tokenize our sentence with the BERT tokenizer.
     tokenized_text = tokenizer.tokenize(sentence)
 
-    # Map the token strings to their vocabulary indeces.
+    # Map the token strings to their vocabulary indices.
     indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
 
     # Print out the tokens.
@@ -72,20 +72,22 @@ def create_matrix(content) -> ndarray:
         for t in content
     ])
 
-def run_clusters(content, ratio=0.3, algorithm='kmeans') -> List[str]:
+def run_clusters(content, ratio=0.2, algorithm='kmeans') -> List[str]:
     referenced_data = coreference_handler(content)
-    processed_sentences = sentence_handler(content)
+    print("length content =" + str(len(referenced_data)))
+    processed_sentences = sentence_handler(referenced_data)
     features = create_matrix(processed_sentences)
     hidden_args = cluster_features(features, ratio)
-    return [content[j] for j in hidden_args]
+    return [referenced_data[j] for j in hidden_args]
 
-def create_summary(content, ratio=0.3, algorithm='kmeans'):
-    sentences_summary = run_clusters(content, 0.3, 'kmeans')
+def create_summary(content, ratio=0.2, algorithm='kmeans'):
+    sentences_summary = run_clusters(content, 0.2, 'kmeans')
     modified_summary = []
     # Remove [CLS] and [SEP] tokens
     for sentence in sentences_summary:
         sentence = sentence.replace('[CLS]', '')
         sentence = sentence.replace('[SEP]', '')
         modified_summary.append(sentence)
-    summary = '.'.join(modified_summary)
+    print("length summary =" + str(len(modified_summary)))
+    summary = ' '.join(modified_summary)
     return summary
