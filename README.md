@@ -72,6 +72,10 @@ The result is the average ROUGE-1, ROUGE-2 and ROUGE-l score across the range of
 * [Spacy](https://spacy.io/api/doc) - Used for NLP language
  
 
+## This Work has been published in the ICCCS IEEE conference at IIT Patna on October 14-16, 2020.
+
+Link to our research paper: Soon !!
+
 ## Contributors
 
 * **Anirudh S** - (https://github.com/anirudhs1998)
