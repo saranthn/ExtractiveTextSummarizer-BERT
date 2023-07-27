@@ -1,5 +1,5 @@
-# Extractive Text Summarization using BERT
 <a name="readme-top"></a>
+# Extractive Text Summarization using BERT
 
 <!-- TABLE OF CONTENTS -->
 <details>
